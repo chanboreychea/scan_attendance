@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:attendance/attendance.dart';
+import 'package:attendance/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:attendance/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,18 +50,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('IAU'),
+        backgroundColor: const Color.fromARGB(255, 9, 99, 189),
+        title: Text(
+          'Attendance',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: Icon(Icons.logout, color: Colors.white),
             onPressed: handleLogout,
           ),
         ],
       ),
       body: Center(
-        child: user != null
-            ? QRScannerScreen()
-            : CircularProgressIndicator(),
+        child: user != null ? QRScannerScreen() : CircularProgressIndicator(),
       ),
     );
   }

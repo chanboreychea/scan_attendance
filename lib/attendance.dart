@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -21,8 +22,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   String qrCodeResult = "";
   String message = "";
   String locationMessage = '';
-  bool isInRadius =
-      false; // Flag to indicate if the device is within 20 meters of the location
+  bool isInRadius = false;
+
+  String timestamp = DateTime.now().toString();
+  Timer? _timer;
 
   String? token;
   Map<String, dynamic>? user;
@@ -32,6 +35,25 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     super.initState();
     _loadUserData();
     _checkLocation();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        timestamp = _formatTimestamp(DateTime.now());
+      });
+    });
+  }
+
+  static String _formatTimestamp(DateTime dateTime) {
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   void _loadUserData() async {
@@ -63,7 +85,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
     // Calculate the distance between current location and target location
     double distanceInMeters = Geolocator.distanceBetween(position.latitude,
-        position.longitude, 11.632821786524302, 104.88333642210969);
+        position.longitude, 11.632793951883087, 104.88335830458331);
 
     // Check if the distance is within 20 meters
     setState(() {
@@ -127,25 +149,22 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Scan me...'),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Location message
-          Text(locationMessage),
-
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Welcome, User ID: ${user!['id']}'),
-              Text('Username: ${user!['lastNameKh']} ${user!['firstNameKh']}'),
-              Text('Token: ${token != null ? "okay" : "No Token"}'),
-              Text('Datetime: ${DateTime.now().toIso8601String()}'),
+              Text(
+                'Welcome, ${user!['lastNameKh']} ${user!['firstNameKh']}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 5),
+              Text('Timestamp: $timestamp'),
             ],
           ),
-
+          Text(locationMessage),
+          SizedBox(height: 20),
           // Check if the user is within the radius
           if (isInRadius)
             ElevatedButton(
@@ -182,12 +201,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           else
             Center(
               child: Text(
-                // qrCodeResult.isEmpty
-                //     ? 'Press the button to start scanning'
-                //     : 'Scanned QR Code: $qrCodeResult',
-                message.isEmpty
-                    ? 'Press the button to start scanning'
-                    : 'Message: $message',
+                message.isEmpty ? '' : 'Message: $message',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
