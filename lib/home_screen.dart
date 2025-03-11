@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:attendance/attendance.dart';
+import 'package:attendance/fetch_attendance.dart';
 import 'package:attendance/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,8 +58,20 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout, color: Colors.white),
-            onPressed: handleLogout,
+            icon: Icon(Icons.list_alt_sharp, color: Colors.white),
+            onPressed: () {
+              if (user == null || token == null) {
+                return;
+              }
+              String userId = user!['id'].toString();
+              String tokens = token!;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        AttendanceScreen(userIds: userId, tokens: tokens)),
+              );
+            },
           ),
         ],
       ),

@@ -104,19 +104,15 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   // Function to send the QR scan data to the Laravel API
   void sendScanData(String qrCode) async {
-    // final url = Uri.parse('https://google.com');
     final url = Uri.parse(qrCode);
     final DateTime now = DateTime.now();
 
-    // Format date (e.g., 2025-03-07)
     final DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     String formattedDate = dateFormat.format(now);
 
-    // Format timestamp (e.g., 14:44:00)
     final DateFormat timeFormat = DateFormat("HH:mm:ss");
     String formattedTimestamp = timeFormat.format(now);
 
-    // Send POST request to the Laravel API
     final response = await http.post(
       url,
       body: json.encode({
@@ -206,6 +202,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
+          SizedBox(height: 10),
         ],
       ),
     );
