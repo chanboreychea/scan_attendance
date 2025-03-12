@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
 
-import 'package:attendance/api_service.dart';
+import 'package:attendance/services/auth.dart';
 import 'package:attendance/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

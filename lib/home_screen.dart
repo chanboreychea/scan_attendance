@@ -3,8 +3,9 @@
 import 'dart:convert';
 
 import 'package:attendance/attendance.dart';
-import 'package:attendance/fetch_attendance.dart';
+import 'package:attendance/attendance_screen.dart';
 import 'package:attendance/login_screen.dart';
+import 'package:attendance/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,8 +18,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ApiService apiService = ApiService();
   String? token;
   Map<String, dynamic>? user;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -38,13 +41,33 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void handleLogout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // Clear all stored data
+    setState(() => isLoading = true);
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
+    try {
+      var response = await apiService.logout(token!);
+
+      if (response != null) {
+        setState(() => isLoading = false);
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      } else {
+        setState(() => isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Logout failed.')),
+        );
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again.')),
+      );
+    }
   }
 
   @override
@@ -59,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.list_alt_sharp, color: Colors.white),
+            // onPressed: handleLogout,
             onPressed: () {
               if (user == null || token == null) {
                 return;
