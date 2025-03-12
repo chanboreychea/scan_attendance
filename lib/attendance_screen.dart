@@ -1,4 +1,4 @@
-import 'package:attendance/home_screen.dart';
+import 'package:attendance/attendance.dart';
 import 'package:attendance/services/attendance.dart';
 import 'package:flutter/material.dart';
 
@@ -80,7 +80,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => QRScannerScreen()),
               );
             },
           ),
@@ -149,14 +149,26 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                       ? Colors.red
                                       : Colors.black,
                                 )),
-                            Text('Total: ${attendance.total ?? "N/A"}'),
+                            Text(
+                              'Total: ${attendance.total ?? "N/A"}',
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ],
                         ),
-                        trailing: Text(attendance.leave != null
-                            ? "Leave"
-                            : attendance.mission != null
-                                ? 'Mission'
-                                : 'Present'),
+                        trailing: Text(
+                          attendance.leave != null
+                              ? "Leave"
+                              : attendance.mission != null
+                                  ? 'Mission'
+                                  : 'Present',
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: attendance.leave != null
+                                  ? Colors.red
+                                  : attendance.mission != null
+                                      ? Colors.amber
+                                      : Colors.black),
+                        ),
                       ),
                     );
                   },

@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:attendance/attendance.dart';
 import 'package:attendance/attendance_screen.dart';
 import 'package:attendance/login_screen.dart';
 import 'package:attendance/services/auth.dart';
@@ -73,34 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 9, 99, 189),
-        title: Text(
-          'Attendance',
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.list_alt_sharp, color: Colors.white),
-            // onPressed: handleLogout,
-            onPressed: () {
-              if (user == null || token == null) {
-                return;
-              }
-              String userId = user!['id'].toString();
-              String tokens = token!;
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        AttendanceScreen(userIds: userId, tokens: tokens)),
-              );
-            },
-          ),
-        ],
-      ),
       body: Center(
-        child: user != null ? QRScannerScreen() : CircularProgressIndicator(),
+        child: user != null
+            ? AttendanceScreen(
+                userIds: user!['id'].toString(),
+                tokens: token!,
+              )
+            : CircularProgressIndicator(),
       ),
     );
   }
