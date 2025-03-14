@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:attendance/services/urls.dart';
 import 'package:http/http.dart' as http;
 
 class Attendance {
@@ -53,7 +54,7 @@ class Attendance {
 }
 
 class AttendanceService {
-  final String apiUrl = 'http://172.16.15.111:8000/api';
+  final String apiUrl = API_URL;
 
   Future<List<Attendance>> fetchAttendance(String userId, String token) async {
     try {

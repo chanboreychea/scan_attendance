@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:attendance/services/urls.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final url = 'http://172.16.15.111:8000/api';
+  final String url = API_URL;
 
   Future<Map<String, dynamic>?> login(String email, String password) async {
     try {
@@ -13,8 +14,7 @@ class ApiService {
         body: jsonEncode({
           "email": email,
           "password": password,
-          "app_key":
-              "6dcad16f83595c43a18c848484de9d3ab58ca8adf824dbb0b583afb3990d5aa1"
+          "app_key": APP_KEY
         }),
       );
 
