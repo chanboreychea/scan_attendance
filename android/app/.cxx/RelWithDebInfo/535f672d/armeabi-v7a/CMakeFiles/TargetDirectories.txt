@@ -1,0 +1,2 @@
+D:/iFlutter/attendance/android/app/.cxx/RelWithDebInfo/535f672d/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/iFlutter/attendance/android/app/.cxx/RelWithDebInfo/535f672d/armeabi-v7a/CMakeFiles/rebuild_cache.dir
